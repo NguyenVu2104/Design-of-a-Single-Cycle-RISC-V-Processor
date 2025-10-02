@@ -120,7 +120,73 @@ The Control Unit (CU) serves as the core component that decodes instructions and
 | AUIPC       |   0    |    1    |    1     |   0   |    1    |    1    |    0     |  01    | 0000   | 0000  |
 
 
+The Control Unit decodes the opcode (bits [6:0]), funct3 (bits [14:12]), and funct7 (bits [31:25]) fields of the instruction to support all RV32I instruction types: R-type, I-type, S-type, B-type, U-type, and J-type. For opcode analysis, we examine bits [6:0] to determine the instruction type:
 
+### RISC-V Opcodes and Instruction Types
+
+- **0110011**: R-type (e.g., ADD, SUB)  
+- **0010011**: I-type (e.g., ADDI)  
+- **0000011**: Load (e.g., LW)  
+- **0100011**: Store (e.g., SW)  
+- **1100011**: Branch (e.g., BEQ)  
+- **1101111**: Jump (JAL)  
+- **1100111**: Jump and Link Register (JALR)  
+- **0110111**: Load Upper Immediate (LUI)  
+- **0010111**: Add Upper Immediate to PC (AUIPC)  
+
+---
+
+### funct3 field (bits 14–12)
+
+#### For R-type and I-type ALU-immediates:
+| funct3 | Operation                                                                 |
+|:------:|:--------------------------------------------------------------------------|
+| 000    | ADD / ADDI (if funct7 = 0100000 → SUB)                                    |
+| 001    | Shift-left logical (SLL / SLLI)                                           |
+| 010    | Set-less-than signed (SLT / SLTI)                                         |
+| 011    | Set-less-than unsigned (SLTU / SLTIU)                                     |
+| 100    | Exclusive-OR (XOR / XORI)                                                 |
+| 101    | Shift-right logical (SRL / SRLI) or (if funct7 = 0100000 → SRA / SRAI)    |
+| 110    | OR / ORI                                                                  |
+| 111    | AND / ANDI                                                                |
+
+#### For loads:
+| funct3 | Instruction |
+|:------:|:-----------:|
+| 000    | LB          |
+| 001    | LH          |
+| 010    | LW          |
+| 100    | LBU         |
+| 101    | LHU         |
+
+#### For stores:
+| funct3 | Instruction |
+|:------:|:-----------:|
+| 000    | SB          |
+| 001    | SH          |
+| 010    | SW          |
+
+#### For branches (opcode = 1100011):
+| funct3 | Instruction |
+|:------:|:-----------:|
+| 000    | BEQ         |
+| 001    | BNE         |
+| 100    | BLT         |
+| 101    | BGE         |
+| 110    | BLTU        |
+| 111    | BGEU        |
+
+---
+
+### funct7 field (bits 31–25)
+
+- Applies only for **R-type** and **immediate shifts** (SLLI, SRLI, SRAI).  
+- Default: `0000000` for most operations.  
+- `0100000` selects complementary forms:  
+  - **funct3 = 000, funct7 = 0100000 → SUB** (otherwise ADD).  
+  - **funct3 = 101, funct7 = 0100000 → SRA/SRAI** (otherwise SRL/SRLI).  
+
+👉 For loads, stores, branches, jumps, LUI, or AUIPC, the funct7 field is ignored.
 
 
 
