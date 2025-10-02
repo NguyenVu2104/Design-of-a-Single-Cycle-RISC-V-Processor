@@ -11,16 +11,16 @@
 <img width="1086" height="470" alt="image" src="https://github.com/user-attachments/assets/4b804a92-2241-47b1-a275-0cb4b9ce400a" />
 
 	Since we do not have operators for subtraction (–), comparison (<,  >), shifting (<<, >> and >>>), multiplication (∗), division (/), modulo (%), and other unsynthesizable operators in designs thus these operations can be executed as follows: 
-	Subtraction:  Achieved by computing the two's complement of the second operand (i_operand_b) and adding it to the first operand (i_operand_a). This is done by inverting the bits of i_operand_b and adding 1, effectively performing rs1 - rs2 = rs1 + ~rs2 + 1.
-	Comparison: 
-	SLT (Signed Less Than): Performs a signed comparison by checking if i_operand_a is less than i_operand_b. This is determined by the sign bit of the subtraction result (i_operand_a - i_operand_b).
-	SLTU (Unsigned Less Than): Performs an unsigned comparison by directly comparing the magnitudes of i_operand_a and i_operand_b.
-	Shifting: 
-	SLL (Shift Left Logical): Uses the left shift operator (<<) to shift i_operand_a left by the number of bits specified in i_operand_b, filling the least significant bits with zeros.
-	SRL (Shift Right Logical): Uses the right shift operator (>>) to shift i_operand_a right, filling the most significant bits with zeros.
-	SRA (Shift Right Arithmetic): Uses the arithmetic right shift operator (>>>) to shift i_operand_a right, preserving the sign bit for signed numbers by filling the most significant bits with the original sign bit.
-	Bitwise Operations (XOR, OR, AND): Directly applies the corresponding bitwise operators (^, |, &) to the operands i_operand_a and i_operand_b.
-	Pass-through (B): Outputs i_operand_b directly without modification, used in certain instructions where no computation is required like LUI instruction.
+- Subtraction:  Achieved by computing the two's complement of the second operand (i_operand_b) and adding it to the first operand (i_operand_a). This is done by inverting the bits of i_operand_b and adding 1, effectively performing rs1 - rs2 = rs1 + ~rs2 + 1.
+- Comparison:
+  + SLT (Signed Less Than): Performs a signed comparison by checking if i_operand_a is less than i_operand_b. This is determined by the sign bit of the subtraction result (i_operand_a - i_operand_b).
+  + SLTU (Unsigned Less Than): Performs an unsigned comparison by directly comparing the magnitudes of i_operand_a and i_operand_b.
+- Shifting:
+  + SLL (Shift Left Logical): Uses the left shift operator (<<) to shift i_operand_a left by the number of bits specified in i_operand_b, filling the least significant bits with zeros.
+  + SRL (Shift Right Logical): Uses the right shift operator (>>) to shift i_operand_a right, filling the most significant bits with zeros.
+  + SRA (Shift Right Arithmetic): Uses the arithmetic right shift operator (>>>) to shift i_operand_a right, preserving the sign bit for signed numbers by filling the most significant bits with the original sign bit.
+- Bitwise Operations (XOR, OR, AND): Directly applies the corresponding bitwise operators (^, |, &) to the operands i_operand_a and i_operand_b.
+- Pass-through (B): Outputs i_operand_b directly without modification, used in certain instructions where no computation is required like LUI instruction.
 
 	The operation is selected using a case statement in the alu module, driven by the 4-bit opcode (i_alu_op) input. This ensures that the correct computation is performed for each instruction type, supporting both R-type and I-type instructions as specified in the RV32I architecture.
 
