@@ -64,13 +64,19 @@ The ImmGen takes a 32-bit instruction as its primary input and generates a 32-bi
 The module accepts a 32-bit instruction and uses the opcode (bits [6:0]) to identify the instruction type. This decoding step determines the immediate format to be generated, Immediate format:
 
 - I-type: Extracts a 12-bit immediate from bits [31:20], sign-extending it to 32 bits by replicating the most significant bit (MSB).
-  
 - S-type: Combines bits [31:25] and [11:7] to form a 12-bit immediate, followed by sign extension.
 - B-type: Rearranges bits [31], [7], [30:25], and [11:8] into a 12-bit immediate (with an implicit zero in the LSB), sign-extended to 32 bits.
 - U-type: Takes bits [31:12] as a 20-bit immediate and shifts it left by 12 bits, filling the lower bits with zeros.
 - J-type: Assembles bits [31], [19:12], [20], and [30:21] into a 20-bit immediate (with an implicit zero in the LSB), sign-extended to 32 bits.
 
+## Control Unit (CU)
 
+The Control Unit (CU) serves as the core component that decodes instructions and generates control signals to manage the processor's operations. It interprets the fetched instruction and directs the behavior of other units, including the Arithmetic Logic Unit (ALU), Branch Comparison Unit (BRC), Register File, and Load-Store Unit, ensuring proper execution within a single-cycle RV32I processor. Below is a detailed description of every function the Control Unit performs to ensure proper execution of the RV32I instruction set:
+
+| First Header  | Second Header |
+| ------------- | ------------- |
+| Content Cell  | Content Cell  |
+| Content Cell  | Content Cell  |
 
 
 
