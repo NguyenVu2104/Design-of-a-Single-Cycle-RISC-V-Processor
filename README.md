@@ -181,12 +181,12 @@ The Control Unit decodes the opcode (bits [6:0]), funct3 (bits [14:12]), and fun
 ### funct7 field (bits 31–25)
 
 - Applies only for **R-type** and **immediate shifts** (SLLI, SRLI, SRAI).  
-- Default: `0000000` for most operations.  
+- Default is `0000000` for most operations.  
 - `0100000` selects complementary forms:  
-  - **funct3 = 000, funct7 = 0100000 → SUB** (otherwise ADD).  
-  - **funct3 = 101, funct7 = 0100000 → SRA/SRAI** (otherwise SRL/SRLI).  
+  + **funct3 = 000, funct7 = 0100000 → SUB** (otherwise ADD).  
+  + **funct3 = 101, funct7 = 0100000 → SRA/SRAI** (otherwise SRL/SRLI).  
 
-👉 For loads, stores, branches, jumps, LUI, or AUIPC, the funct7 field is ignored.
+For loads, stores, branches, jumps, LUI, or AUIPC, the funct7 field is ignored.
 
 
 
