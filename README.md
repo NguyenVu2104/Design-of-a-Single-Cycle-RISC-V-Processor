@@ -73,10 +73,45 @@ The module accepts a 32-bit instruction and uses the opcode (bits [6:0]) to iden
 
 The Control Unit (CU) serves as the core component that decodes instructions and generates control signals to manage the processor's operations. It interprets the fetched instruction and directs the behavior of other units, including the Arithmetic Logic Unit (ALU), Branch Comparison Unit (BRC), Register File, and Load-Store Unit, ensuring proper execution within a single-cycle RV32I processor. Below is a detailed description of every function the Control Unit performs to ensure proper execution of the RV32I instruction set:
 
-| First Header  | Second Header |
-| ------------- | ------------- |
-| Content Cell  | Content Cell  |
-| Content Cell  | Content Cell  |
+| Instruction | pc_sel | rd_wren | insn_vld | br_un | opa_sel | opb_sel | mem_wren | wb_sel | alu_op | bmask |
+|-------------|--------|---------|----------|-------|---------|---------|----------|--------|--------|-------|
+| ADD         | 0      | 1       | 1        | 0     | 0       | 0       | 0        | 01     | 0000   | 0000  |
+| SUB         | 0      | 1       | 1        | 0     | 0       | 0       | 0        | 01     | 1000   | 0000  |
+| SLL         | 0      | 1       | 1        | 0     | 0       | 0       | 0        | 01     | 0001   | 0000  |
+| SLT         | 0      | 1       | 1        | 0     | 0       | 0       | 0        | 01     | 0010   | 0000  |
+| SLTU        | 0      | 1       | 1        | 0     | 0       | 0       | 0        | 01     | 0011   | 0000  |
+| XOR         | 0      | 1       | 1        | 0     | 0       | 0       | 0        | 01     | 0100   | 0000  |
+| SRL         | 0      | 1       | 1        | 0     | 0       | 0       | 0        | 01     | 0101   | 0000  |
+| SRA         | 0      | 1       | 1        | 0     | 0       | 0       | 0        | 01     | 1101   | 0000  |
+| OR          | 0      | 1       | 1        | 0     | 0       | 0       | 0        | 01     | 0110   | 0000  |
+| AND         | 0      | 1       | 1        | 0     | 0       | 0       | 0        | 01     | 0111   | 0000  |
+| ADDI        | 0      | 1       | 1        | 0     | 0       | 1       | 0        | 01     | 0000   | 0000  |
+| SLLI        | 0      | 1       | 1        | 0     | 0       | 1       | 0        | 01     | 0001   | 0000  |
+| SLTI        | 0      | 1       | 1        | 0     | 0       | 1       | 0        | 01     | 0010   | 0000  |
+| SLTIU       | 0      | 1       | 1        | 0     | 0       | 1       | 0        | 01     | 0011   | 0000  |
+| XORI        | 0      | 1       | 1        | 0     | 0       | 1       | 0        | 01     | 0100   | 0000  |
+| SRLI        | 0      | 1       | 1        | 0     | 0       | 1       | 0        | 01     | 0101   | 0000  |
+| SRAI        | 0      | 1       | 1        | 0     | 0       | 1       | 0        | 01     | 1101   | 0000  |
+| ORI         | 0      | 1       | 1        | 0     | 0       | 1       | 0        | 01     | 0110   | 0000  |
+| ANDI        | 0      | 1       | 1        | 0     | 0       | 1       | 0        | 01     | 0111   | 0000  |
+| LB          | 0      | 1       | 1        | 0     | 0       | 1       | 0        | 10     | 0000   | 0001  |
+| LH          | 0      | 1       | 1        | 0     | 0       | 1       | 0        | 10     | 0000   | 0011  |
+| LW          | 0      | 1       | 1        | 0     | 0       | 1       | 0        | 10     | 0000   | 1111  |
+| LBU         | 0      | 1       | 1        | 0     | 0       | 1       | 0        | 10     | 0000   | 1001  |
+| LHU         | 0      | 1       | 1        | 0     | 0       | 1       | 0        | 10     | 0000   | 1011  |
+| SB          | 0      | 0       | 1        | 0     | 0       | 1       | 1        | 11     | 0000   | 0001  |
+| SH          | 0      | 0       | 1        | 0     | 0       | 1       | 1        | 11     | 0000   | 0011  |
+| SW          | 0      | 0       | 1        | 0     | 0       | 1       | 1        | 11     | 0000   | 1111  |
+| BEQ         | 1      | 0       | 1        | 1     | 1       | 1       | 0        | 10     | 0000   | 0000  |
+| BNE         | 1      | 0       | 1        | 1     | 1       | 1       | 0        | 10     | 0000   | 0000  |
+| BLT         | 1      | 0       | 1        | 1     | 1       | 1       | 0        | 10     | 0000   | 0000  |
+| BGE         | 1      | 0       | 1        | 1     | 1       | 1       | 0        | 10     | 0000   | 0000  |
+| BLTU        | 1      | 0       | 1        | 0     | 1       | 1       | 0        | 10     | 0000   | 0000  |
+| JAL         | 1      | 1       | 1        | 0     | 1       | 1       | 0        | 00     | 0000   | 0000  |
+| JALR        | 1      | 1       | 1        | 0     | 0       | 1       | 0        | 00     | 0000   | 0000  |
+| LUI         | 0      | 1       | 1        | 0     | 0       | 1       | 0        | 01     | 1010   | 0000  |
+| AUIPC       | 0      | 1       | 1        | 0     | 1       | 1       | 0        | 01     | 0000   | 0000  |
+
 
 
 
